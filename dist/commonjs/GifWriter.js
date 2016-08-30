@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _ByteArray2 = require('./ByteArray.js');
 
@@ -18,13 +18,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var GifWriter = (function (_ByteArray) {
+var GifWriter = function (_ByteArray) {
 	_inherits(GifWriter, _ByteArray);
 
 	function GifWriter() {
 		_classCallCheck(this, GifWriter);
 
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(GifWriter).call(this));
+		return _possibleConstructorReturn(this, (GifWriter.__proto__ || Object.getPrototypeOf(GifWriter)).call(this));
 	}
 
 	_createClass(GifWriter, [{
@@ -171,7 +171,6 @@ var GifWriter = (function (_ByteArray) {
 			var dataBlock = [1, // Sub-block ID
 			loopCount & 0xFF, loopCount >> 8 & 0xFF];
 
-			// Loop Count (2 bytes)
 			this.writeApplicationExtension('NETSCAPE', '2.0', [dataBlock]);
 		}
 	}, {
@@ -213,7 +212,7 @@ var GifWriter = (function (_ByteArray) {
 	}]);
 
 	return GifWriter;
-})(_ByteArray3.default);
+}(_ByteArray3.default);
 
 exports.default = GifWriter;
 //# sourceMappingURL=GifWriter.js.map
