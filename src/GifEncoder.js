@@ -221,7 +221,23 @@ export default class GifEncoder {
 		this.images.push([rgbaPixels, left, top, width, height, disposalMethod, delayTime, transparentColor]);
 	}
 
-	async encode() {
+	encode() {
+		return new Promise((resolve) => {
+			let timeout;
+			const iterator = this._encodingGenerator();
+			const runner = () => {
+				const result = iterator.next();
+				if(!result.done) {
+					timeout = setTimeout(runner, 0);
+				} else {
+					resolve(result.value);
+				}
+			};
+			runner();
+		});
+	}
+
+	*_encodingGenerator() {
 		if (!this.images.length) {
 			throw new Error('No images added. Use addImage() to add images.');
 		}
@@ -254,7 +270,17 @@ export default class GifEncoder {
 		const imageEncoder = new ImageEncoder();
 
 		// Loop images
+
+		const totalImages = this.images.length;
+		let currentImageIndex = 0;
 		for (const image of this.images) {
+
+			yield { // progress
+                current: currentImageIndex,
+                total: totalImages,
+                step: 'encoding'
+            };
+
 			const [
 				rgbaPixels,
 				left = 0,
@@ -273,6 +299,12 @@ export default class GifEncoder {
 				tableBasedImageData
 			] = imageEncoder.encodeImage(rgbaPixels, this.samplingFactor, width, height, transparentColor);
 
+			yield { // progress
+                current: currentImageIndex,
+                total: totalImages,
+                step: 'writing'
+            };
+
 			// Write the image
 			gifWriter.writeImage(
 				left,
@@ -286,6 +318,12 @@ export default class GifEncoder {
 				tableBasedImageData
 			);
 		}
+
+		yield { // progress
+            current: currentImageIndex,
+            total: totalImages,
+            step: 'finishing'
+        };
 
 		// Write Trailer
 		gifWriter.writeTrailer();
