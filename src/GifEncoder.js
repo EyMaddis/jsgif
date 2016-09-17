@@ -22,6 +22,7 @@ export default class GifEncoder {
 		this.disposalMethod = 0;
 		this.samplingFactor = 10;
 		this.comment = undefined;
+        this.onProgress = undefined;
 	}
 
 	/**
@@ -229,9 +230,12 @@ export default class GifEncoder {
 				const result = iterator.next();
 				if(!result.done) {
 					timeout = setTimeout(runner, 0);
-				} else {
-					resolve(result.value);
-				}
+                    if(this.onProgress && typeof this.onProgress === 'function') {
+                        this.onProgress(result.value);
+                    }
+                } else {
+                    resolve(result.value);
+                }
 			};
 			runner();
 		});
@@ -274,8 +278,7 @@ export default class GifEncoder {
 		const totalImages = this.images.length;
 		let currentImageIndex = 0;
 		for (const image of this.images) {
-
-			yield { // progress
+            yield { // progress
                 current: currentImageIndex,
                 total: totalImages,
                 step: 'encoding'
@@ -321,6 +324,7 @@ export default class GifEncoder {
 				localColorTable,
 				tableBasedImageData
 			);
+            currentImageIndex++;
 		}
 
 		yield { // progress

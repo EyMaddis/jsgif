@@ -42,6 +42,7 @@ var GifEncoder = function () {
 		this.disposalMethod = 0;
 		this.samplingFactor = 10;
 		this.comment = undefined;
+		this.onProgress = undefined;
 	}
 
 	/**
@@ -92,6 +93,9 @@ var GifEncoder = function () {
 					var result = iterator.next();
 					if (!result.done) {
 						timeout = setTimeout(runner, 0);
+						if (_this.onProgress && typeof _this.onProgress === 'function') {
+							_this.onProgress(result.value);
+						}
 					} else {
 						resolve(result.value);
 					}
@@ -147,7 +151,7 @@ var GifEncoder = function () {
 
 						case 15:
 							if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-								_context.next = 47;
+								_context.next = 48;
 								break;
 							}
 
@@ -201,55 +205,56 @@ var GifEncoder = function () {
 
 							// Write the image
 							gifWriter.writeImage(left, top, width, height, disposalMethod, delayTime, transparentColorIndex, localColorTable, tableBasedImageData);
+							currentImageIndex++;
 
-						case 44:
+						case 45:
 							_iteratorNormalCompletion = true;
 							_context.next = 15;
 							break;
 
-						case 47:
-							_context.next = 53;
+						case 48:
+							_context.next = 54;
 							break;
 
-						case 49:
-							_context.prev = 49;
+						case 50:
+							_context.prev = 50;
 							_context.t0 = _context['catch'](13);
 							_didIteratorError = true;
 							_iteratorError = _context.t0;
 
-						case 53:
-							_context.prev = 53;
+						case 54:
 							_context.prev = 54;
+							_context.prev = 55;
 
 							if (!_iteratorNormalCompletion && _iterator.return) {
 								_iterator.return();
 							}
 
-						case 56:
-							_context.prev = 56;
+						case 57:
+							_context.prev = 57;
 
 							if (!_didIteratorError) {
-								_context.next = 59;
+								_context.next = 60;
 								break;
 							}
 
 							throw _iteratorError;
 
-						case 59:
-							return _context.finish(56);
-
 						case 60:
-							return _context.finish(53);
+							return _context.finish(57);
 
 						case 61:
-							_context.next = 63;
+							return _context.finish(54);
+
+						case 62:
+							_context.next = 64;
 							return { // progress
 								current: currentImageIndex,
 								total: totalImages,
 								step: 'finishing'
 							};
 
-						case 63:
+						case 64:
 							if (disposeUsedFrames) {
 								this.images = [];
 							}
@@ -259,12 +264,12 @@ var GifEncoder = function () {
 
 							return _context.abrupt('return', gifWriter.getData());
 
-						case 66:
+						case 67:
 						case 'end':
 							return _context.stop();
 					}
 				}
-			}, _encodingGenerator, this, [[13, 49, 53, 61], [54,, 56, 60]]);
+			}, _encodingGenerator, this, [[13, 50, 54, 62], [55,, 57, 61]]);
 		})
 	}, {
 		key: 'delayTime',
